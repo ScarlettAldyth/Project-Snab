@@ -1,0 +1,7 @@
+Use this command to use npm commands:
+Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
+
+to run the site, use:
+npm run dev
+
+And use "q" to quit when you want to stop the server.
