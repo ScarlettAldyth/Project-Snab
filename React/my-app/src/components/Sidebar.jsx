@@ -7,7 +7,7 @@ import gamesCover from '../assets/ModeCovers/games-cover.jpg';
 import mindMapCover from '../assets/ModeCovers/mind-map-cover.jpg';
 import visualizerCover from '../assets/ModeCovers/visualizer-cover.jpg';
 
-const Sidebar = ({ mode, setMode }) => {
+const Sidebar = forwardRef(({ mode, setMode }, ref) => {
     const [activeGame, setActiveGame] = useState(null);
 
     // Initialize standard games list
@@ -23,6 +23,29 @@ const Sidebar = ({ mode, setMode }) => {
     // Initialize game tiles state
     const [gameTiles, setGameTiles] = useState(initialGames);
 
+    useImperativeHandle(ref, () => ({
+        reorderModeTiles: (targetModeId) => {
+            const index = modeTiles.findIndex(t => t.id === targetModeId);
+            if (index > -1) {
+                const newTiles = [...modeTiles];
+                const [targetTile] = newTiles.splice(index, 1);
+                newTiles.unshift(targetTile);
+                setModeTiles(newTiles);
+                setMode(targetModeId); // Auto-navigate to it
+            }
+        },
+        reorderGameTiles: (targetGameName) => {
+            const index = gameTiles.findIndex(g => g.name === targetGameName);
+            if (index > -1) {
+                const newTiles = [...gameTiles];
+                const [targetTile] = newTiles.splice(index, 1);
+                newTiles.unshift(targetTile);
+                setGameTiles(newTiles);
+                setMode('game_selection'); // Go to game selection to show it
+            }
+        }
+    }));
+
     const handleGameClick = (game) => {
         setActiveGame(game);
         setMode('game_play');
@@ -34,17 +57,6 @@ const Sidebar = ({ mode, setMode }) => {
             ← Back
         </button>
     );
-
-    // Programmatic reordering functions (available w/in code)
-    const shuffleModeTiles = () => {
-        const shuffled = [...modeTiles].sort(() => Math.random() - 0.5);
-        setModeTiles(shuffled);
-    };
-
-    const shuffleGameTiles = () => {
-        const shuffled = [...gameTiles].sort(() => Math.random() - 0.5);
-        setGameTiles(shuffled);
-    };
 
     // 1. Mode Selection (Default)
     if (mode === 'mode_selection') {
@@ -70,8 +82,6 @@ const Sidebar = ({ mode, setMode }) => {
                         </Reorder.Item>
                     ))}
                 </Reorder.Group>
-                {/* valid "within code" usage example: hidden by default or dev-only */}
-                {/* <button onClick={shuffleModeTiles} style={{marginTop: 'auto', fontSize: '0.8rem'}}>Shuffle (Debug)</button> */}
             </div>
         );
     }
@@ -152,6 +162,6 @@ const Sidebar = ({ mode, setMode }) => {
     }
 
     return <div className="sidebar">Unknown Mode</div>;
-};
+});
 
 export default Sidebar;

@@ -87,3 +87,33 @@ export async function analyzeTheme(userMessage) {
     return { theme: null };
   }
 }
+
+export async function analyzeConfirmation(userMessage) {
+  if (!genAI) {
+    initializeGemini();
+  }
+
+  const model = genAI.getGenerativeModel({
+    model: "gemini-2.5-flash",
+    generationConfig: { responseMimeType: "application/json" }
+  });
+
+  const prompt = `
+    Analyze the following user message to see if they are confirming/agreeing to a suggestion (e.g., "Yes", "Sure", "Okay", "Sounds good") or rejecting/ignoring it.
+    
+    Return JSON:
+    {
+      "isConfirmed": boolean
+    }
+  
+    User Message: "${userMessage}"
+    `;
+
+  try {
+    const result = await model.generateContent(prompt);
+    return JSON.parse(result.response.text());
+  } catch (error) {
+    console.error("Error analyzing confirmation:", error);
+    return { isConfirmed: false };
+  }
+}
