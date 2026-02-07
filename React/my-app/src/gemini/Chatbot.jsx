@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { sendMessage, resetChat } from "./geminiChat.js";
+import { speakText, stopAudio } from "./elevenLabsVoice.js";
 
 // Session info - will be dynamic later
 const SESSION_INFO = {
@@ -12,6 +13,7 @@ export default function Chatbot() {
   ]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [voiceEnabled, setVoiceEnabled] = useState(false);
   const messagesEndRef = useRef(null);
 
   useEffect(() => {
@@ -37,6 +39,9 @@ export default function Chatbot() {
     try {
       const response = await sendMessage(messageWithContext); // API gets context
       setMessages((prev) => [...prev, { role: "assistant", text: response }]);
+      if (voiceEnabled) {
+        speakText(response).catch(console.error);
+      }
     } catch (error) {
       setMessages((prev) => [
         ...prev,
@@ -50,15 +55,35 @@ export default function Chatbot() {
   const handleReset = () => {
     resetChat();
     setMessages([]);
+    stopAudio();
+  };
+
+  const toggleVoice = () => {
+    if (voiceEnabled) {
+      stopAudio();
+    }
+    setVoiceEnabled(!voiceEnabled);
   };
 
   return (
     <div style={styles.container}>
       <div style={styles.header}>
         <h2 style={styles.title}>Gemini Chatbot</h2>
-        <button onClick={handleReset} style={styles.resetButton}>
-          Reset
-        </button>
+        <div style={styles.headerButtons}>
+          <button
+            onClick={toggleVoice}
+            style={{
+              ...styles.voiceButton,
+              ...(voiceEnabled ? styles.voiceButtonActive : {}),
+            }}
+            title={voiceEnabled ? "Voice On" : "Voice Off"}
+          >
+            {voiceEnabled ? "🔊" : "🔇"}
+          </button>
+          <button onClick={handleReset} style={styles.resetButton}>
+            Reset
+          </button>
+        </div>
       </div>
 
       <div style={styles.messagesContainer}>
@@ -118,6 +143,24 @@ const styles = {
     margin: 0,
     fontSize: "18px",
   },
+  headerButtons: {
+    display: "flex",
+    gap: "8px",
+    alignItems: "center",
+  },
+  voiceButton: {
+    padding: "6px 12px",
+    backgroundColor: "rgba(255,255,255,0.2)",
+    color: "white",
+    border: "1px solid rgba(255,255,255,0.3)",
+    borderRadius: "4px",
+    cursor: "pointer",
+    fontSize: "16px",
+  },
+  voiceButtonActive: {
+    backgroundColor: "rgba(255,255,255,0.9)",
+    color: "#4285f4",
+  },
   resetButton: {
     padding: "6px 12px",
     backgroundColor: "white",
@@ -147,8 +190,8 @@ const styles = {
   assistantMessage: {
     backgroundColor: "white",
     color: "#333",
-    marginRight: "auto",
     border: "1px solid #ddd",
+    marginRight: "auto",
   },
   errorMessage: {
     backgroundColor: "#ffebee",
