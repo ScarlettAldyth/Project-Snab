@@ -29,6 +29,9 @@ body {
   align-items: center;
   height: 100%;
   width: 100%;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 }
 
 .landing-content {
@@ -36,14 +39,7 @@ body {
   flex-direction: column;
   align-items: center;
   gap: 2rem;
-}
-
-.landing-image {
-  width: 80%;
-  max-width: 800px;
-  height: auto;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  /* Add a semi-transparent background to make the button pop if needed, or keep it minimal */
 }
 
 .enter-button {
@@ -66,6 +62,9 @@ body {
   display: flex;
   width: 100%;
   height: 100%;
+  background-color: black;
+  padding: 20px;
+  gap: 20px;
 }
 
 .chat-area-container {
@@ -73,18 +72,21 @@ body {
   /* Takes up remaining space */
   display: flex;
   flex-direction: column;
-  background-color: #ffffff;
+  background-color: #000000;
   position: relative;
+  border-radius: 20px;
+  overflow: hidden;
 }
 
 .sidebar-container {
   width: 300px;
   /* Fixed width sidebar */
-  background-color: #f7f7f8;
-  border-left: 1px solid #e0e0e0;
+  background-color: #007BFF;
   display: flex;
   flex-direction: column;
   box-shadow: -2px 0 5px rgba(0, 0, 0, 0.05);
+  border-radius: 20px;
+  overflow: hidden;
 }
 
 /* Chat Area Styles */
@@ -128,10 +130,10 @@ body {
 
 .input-area {
   padding: 20px;
-  border-top: 1px solid #e0e0e0;
+  border-top: 1px solid #000000;
   display: flex;
   gap: 10px;
-  background-color: white;
+  background-color: #000000;
 }
 
 .input-area input {
@@ -181,7 +183,8 @@ body {
   width: 100%;
   aspect-ratio: 1;
   /* Make tiles square */
-  background-color: white;
+  background-color: #68bf93;
+  color: white;
   border-radius: 12px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
   cursor: pointer;
@@ -199,8 +202,8 @@ body {
 .mode-tile:hover {
   transform: translateY(-2px);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  border-color: #007bff;
-  color: #007bff;
+  border-color: #57a67d;
+  color: white;
 }
 
 .back-button {
@@ -241,19 +244,19 @@ body {
   width: 100%;
   aspect-ratio: 1;
   /* Square tiles */
-  background-color: #e9ecef;
+  background-color: #68bf93;
   border-radius: 12px;
   display: flex;
   justify-content: center;
   align-items: center;
   cursor: pointer;
   font-weight: bold;
-  color: #495057;
+  color: white;
   transition: background-color 0.2s;
 }
 
 .game-tile:hover {
-  background-color: #dee2e6;
+  background-color: #57a67d;
 }
 
 /* Placeholders */
