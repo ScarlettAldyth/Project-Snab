@@ -1,16 +1,22 @@
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: #f0f2f5;
+  color: #333;
+}
+
 #root {
   width: 100%;
   height: 100%;
   margin: 0;
   padding: 0;
-}
-
-body {
-  margin: 0;
-  padding: 0;
-  font-family: 'Inter', sans-serif;
-  background-color: #f0f2f5;
-  color: #333;
 }
 
 .app-container {
@@ -71,6 +77,8 @@ body {
   background-color: black;
   padding: 20px;
   gap: 20px;
+  box-sizing: border-box;
+  overflow: hidden;
 }
 
 .chat-area-container {
@@ -85,14 +93,16 @@ body {
 }
 
 .sidebar-container {
-  width: 300px;
-  /* Fixed width sidebar */
-  background-color: #007BFF;
+  width: 320px;
+  height: 100%;
+  max-height: 100%;
+  background: linear-gradient(165deg, #1a1a2e 0%, #16213e 40%, #0f3460 100%);
   display: flex;
   flex-direction: column;
-  box-shadow: -2px 0 5px rgba(0, 0, 0, 0.05);
+  box-shadow: -4px 0 20px rgba(0, 0, 0, 0.3);
   border-radius: 20px;
   overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 /* Chat Area Styles */
@@ -183,132 +193,190 @@ body {
 .sidebar {
   padding: 20px;
   height: 100%;
+  max-height: 100%;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
 }
 
 /* Sidebar Components */
 .mode-selection {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 16px;
   align-items: center;
-  padding-top: 40px;
+  padding-top: 30px;
+  flex: 1;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255,255,255,0.2) transparent;
+}
+
+.mode-selection::-webkit-scrollbar {
+  width: 6px;
+}
+
+.mode-selection::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.mode-selection::-webkit-scrollbar-thumb {
+  background: rgba(255,255,255,0.2);
+  border-radius: 3px;
 }
 
 .mode-tile {
   width: 100%;
-  aspect-ratio: 1;
-  /* Make tiles square */
-  background-color: #869A4B;
+  aspect-ratio: 1.4;
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.45) 0%, rgba(118, 75, 162, 0.45) 100%);
   color: white;
-  border-radius: 12px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  border-radius: 16px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
   cursor: pointer;
   display: flex;
   justify-content: center;
   align-items: center;
   font-weight: 600;
   font-size: 1.1rem;
-  transition: transform 0.2s, box-shadow 0.2s;
-  border: 1px solid #eee;
+  transition: all 0.3s ease;
+  border: 1px solid rgba(255, 255, 255, 0.15);
   padding: 0;
-  /* Let flexbox handle centering */
+  backdrop-filter: blur(10px);
+  flex-shrink: 0;
 }
 
 .mode-tile:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  border-color: #57a67d;
-  color: white;
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+  border-color: rgba(255, 255, 255, 0.3);
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.6) 0%, rgba(118, 75, 162, 0.6) 100%);
 }
 
 .back-button {
   align-self: flex-start;
-  margin-bottom: 20px;
-  background: none;
-  border: none;
-  color: #666;
-  font-size: 1rem;
+  margin-bottom: 16px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 0.9rem;
   cursor: pointer;
-  padding: 5px 0;
+  padding: 8px 16px;
+  border-radius: 20px;
   display: flex;
   align-items: center;
-  gap: 5px;
+  gap: 6px;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
 }
 
 .back-button:hover {
-  color: #007bff;
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  transform: translateX(-2px);
 }
 
 /* Game Selection */
 .game-selection h3 {
   margin-top: 0;
-  margin-bottom: 20px;
+  margin-bottom: 16px;
   text-align: center;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 1.1rem;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  flex-shrink: 0;
 }
 
 .game-list {
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  gap: 14px;
   overflow-y: auto;
-  padding: 5px;
-  /* Space for shadows */
+  padding: 4px;
+  flex: 1;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255,255,255,0.2) transparent;
+}
+
+.game-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.game-list::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.game-list::-webkit-scrollbar-thumb {
+  background: rgba(255,255,255,0.2);
+  border-radius: 3px;
 }
 
 .game-tile {
   width: 100%;
-  aspect-ratio: 1;
-  /* Square tiles */
-  background-color: #68bf93;
-  border-radius: 12px;
+  aspect-ratio: 1.5;
+  background: linear-gradient(135deg, rgba(104, 191, 147, 0.55) 0%, rgba(87, 166, 125, 0.55) 100%);
+  border-radius: 14px;
   display: flex;
   justify-content: center;
   align-items: flex-end;
-  /* Align text to bottom */
   cursor: pointer;
   font-weight: bold;
   color: white;
-  transition: background-color 0.2s;
+  transition: all 0.3s ease;
   overflow: hidden;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  flex-shrink: 0;
 }
 
 .game-tile:hover {
-  background-color: #57a67d;
-  /* Fallback hover color */
-  transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 8px 25px rgba(104, 191, 147, 0.45);
+  border-color: rgba(255, 255, 255, 0.3);
 }
 
 .game-tile-overlay {
   width: 100%;
-  background: rgba(0, 0, 0, 0.6);
-  padding: 8px;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0.4) 70%, transparent 100%);
+  padding: 20px 12px 12px;
   text-align: center;
   color: white;
-  font-size: 0.9rem;
+  font-size: 0.95rem;
+  font-weight: 500;
+  letter-spacing: 0.3px;
 }
 
 .game-interface-wrapper {
-  flex-grow: 1;
+  flex: 1;
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  min-height: 0;
 }
 
 /* Placeholders */
 .game-interface-placeholder,
 .placeholder-content {
-  flex-grow: 1;
+  flex: 1;
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: white;
-  border-radius: 12px;
-  border: 2px dashed #ddd;
-  color: #aaa;
-  margin-top: 10px;
+  background: linear-gradient(135deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.02) 100%);
+  border-radius: 14px;
+  border: 1px dashed rgba(255, 255, 255, 0.2);
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 0.95rem;
+  letter-spacing: 0.5px;
+}
+
+/* Game play mode specific styling */
+.sidebar.game-play {
+  overflow: hidden;
+}
+
+/* Mind map and visualizer modes */
+.sidebar.mind-map,
+.sidebar.visualizer {
+  overflow: hidden;
 }
