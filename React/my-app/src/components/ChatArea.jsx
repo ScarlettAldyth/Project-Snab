@@ -12,6 +12,10 @@ const ChatArea = (props) => {
     const [voiceEnabled, setVoiceEnabled] = useState(false);
     const messagesEndRef = useRef(null);
 
+    // Track if we have successfully suggested a theme/tool
+    // We use a ref so it persists across renders but doesn't trigger re-renders itself
+    const hasSuggestedThemeRef = useRef(false);
+
     useEffect(() => {
         try {
             initializeGemini();
@@ -36,6 +40,43 @@ const ChatArea = (props) => {
         setIsLoading(true);
 
         try {
+            let systemInjection = "";
+
+            // Only analyze if we haven't found a theme yet
+            if (!hasSuggestedThemeRef.current) {
+                const { analyzeTheme } = await import('../gemini/geminiChat');
+                const analysis = await analyzeTheme(userText);
+                console.log("Analysis Result:", analysis);
+
+                if (analysis.theme && analysis.theme !== 'Unclear') {
+                    // Found a clear theme!
+                    hasSuggestedThemeRef.current = true;
+
+                    if (props.onThemeAction) {
+                        if (analysis.theme === 'Specificity') {
+                            props.onThemeAction('mode', 'visualizer');
+                            systemInjection = "[SYSTEM: The user describes a specific scenario. Suggest they use the 'Visualizer' tool in the sidebar to map it out.] ";
+                        } else if (analysis.theme === 'Complexity') {
+                            props.onThemeAction('mode', 'mind_map');
+                            systemInjection = "[SYSTEM: The user describes a complex situation. Suggest they use the 'Mind Map' tool in the sidebar to organize their thoughts.] ";
+                        } else if (analysis.theme === 'Simplicity') {
+                            if (analysis.targetGame) {
+                                props.onThemeAction('game', analysis.targetGame);
+                                systemInjection = `[SYSTEM: The user expresses simple but strong emotion. Suggest they play '${analysis.targetGame}' in the Games menu to help regulate this emotion.] `;
+                            }
+                        }
+                    }
+
+                    // Schedule follow-up check (only once when theme is found)
+                    setTimeout(() => {
+                        window.dispatchEvent(new CustomEvent('gemini-followup-check'));
+                    }, 10000);
+                } else {
+                    // Theme is Unclear
+                    systemInjection = "[SYSTEM: The user's input is unclear or vague. Do NOT give advice yet. Ask a clarifying question to determine if they are navigating a specific scenario (Specificity), dealing with complex relationships (Complexity), or feeling strong emotions (Simplicity). Your goal is to categorize them before helping.] ";
+                }
+            }
+
             // Contextualize the message based on sidebar mode
             let contextPrefix = "";
             if (sidebarMode) {
@@ -43,7 +84,12 @@ const ChatArea = (props) => {
                 contextPrefix = `[User is currently in "${modeName}" view] `;
             }
 
-            const responseText = await sendMessage(contextPrefix + userText);
+            // Send actual message with injected system instruction to guide the agent's response
+            const fullPrompt = systemInjection + contextPrefix + userText;
+            console.log("--- DEBUG: SENDING MESSAGE ---");
+            console.log("System Injection:", systemInjection);
+            console.log("Full Prompt:", fullPrompt);
+            const responseText = await sendMessage(fullPrompt);
 
             setMessages(prev => [...prev, {
                 id: Date.now() + 1,
@@ -69,6 +115,8 @@ const ChatArea = (props) => {
     const handleReset = () => {
         resetChat();
         stopAudio();
+        // Reset theme tracking on chat reset
+        if (hasSuggestedThemeRef.current) hasSuggestedThemeRef.current = false;
         setMessages([{ id: Date.now(), sender: 'agent', text: 'Chat reset. How can I help you now?' }]);
     };
 

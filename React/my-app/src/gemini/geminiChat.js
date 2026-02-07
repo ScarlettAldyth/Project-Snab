@@ -42,7 +42,7 @@ export function resetChat() {
   chat = null;
 }
 
-export async function analyzeFirstMessage(userMessage) {
+export async function analyzeTheme(userMessage) {
   // Use a fresh model for this analysis to avoiding polluting the main chat
   if (!genAI) {
     initializeGemini();
@@ -54,10 +54,13 @@ export async function analyzeFirstMessage(userMessage) {
   });
 
   const prompt = `
-  Analyze the following user message and classify it into one of these themes:
-  1. Specificity (Navigating a specific event/scenario)
-  2. Complexity (Complex interpersonal relationships/situations)
-  3. Simplicity (High emotion, low context)
+  Analyze the following user message to determine the best therapeutic tool. 
+  
+  Themes:
+  1. Specificity (User mentions a specific event, person, or scenario they are navigating)
+  2. Complexity (User vaguely describes a complex messy situation or relationship)
+  3. Simplicity (User expresses a raw emotion like anxiety, stress, anger, depression with little context)
+  4. Unclear (Absolute gibberish, "hello", or "idk". NOTE: If there is ANY hint of emotion or situation, CLASSIFY it instead of Unclear.)
 
   If Simplicity, determine the emotion category:
   - "Stress + Overthinking + Anxiety" -> Game: "Crystal Race"
@@ -68,7 +71,7 @@ export async function analyzeFirstMessage(userMessage) {
 
   Return JSON:
   {
-    "theme": "Specificity" | "Complexity" | "Simplicity",
+    "theme": "Specificity" | "Complexity" | "Simplicity" | "Unclear",
     "targetMode": "visualizer" | "mind_map" | "game_selection" | null,
     "targetGame": "Game Name" | null
   }
