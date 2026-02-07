@@ -68,7 +68,7 @@ const Sidebar = forwardRef(({ mode, setMode }, ref) => {
     if (mode === 'mode_selection') {
         return (
             <div className="sidebar mode-selection">
-                <Reorder.Group axis="y" values={modeTiles} onReorder={setModeTiles} className="reorder-group" style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: '14px' }}>
+                <Reorder.Group axis="y" values={modeTiles} onReorder={setModeTiles} className="reorder-group" style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: '14px', padding: 0 }}>
                     {modeTiles.map((tile) => (
                         <Reorder.Item key={tile.id} value={tile} className="mode-tile-wrapper" style={{ listStyle: 'none' }}>
                             <div
