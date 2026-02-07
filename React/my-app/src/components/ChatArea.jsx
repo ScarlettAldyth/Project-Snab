@@ -2,7 +2,31 @@ import React, { useState, useEffect, useRef } from 'react';
 import { initializeGemini, sendMessage, resetChat } from '../gemini/geminiChat';
 import { speakText, stopAudio } from '../gemini/elevenLabsVoice';
 
-const ChatArea = ({ sidebarMode }) => {
+const parseVisualization = (text) => {
+    const visualizationMatch = text.match(/\[VISUALIZATION\]([\s\S]*?)\[\/VISUALIZATION\]/);
+    if (!visualizationMatch) {
+        return { cleanText: text, visualizationData: null };
+    }
+
+    const visualizationBlock = visualizationMatch[1];
+    const cleanText = text.replace(/\[VISUALIZATION\][\s\S]*?\[\/VISUALIZATION\]/, '').trim();
+
+    const sceneMatch = visualizationBlock.match(/===SCENE===([\s\S]*?)(?====|$)/);
+    const charactersMatch = visualizationBlock.match(/===CHARACTERS===([\s\S]*?)(?====|$)/);
+    const actionMatch = visualizationBlock.match(/===ACTION SEQUENCE===([\s\S]*?)(?====|$)/);
+    const dialogueMatch = visualizationBlock.match(/===DIALOGUE===([\s\S]*?)(?====|$)/);
+
+    const visualizationData = {
+        scene: sceneMatch ? sceneMatch[1].trim() : '',
+        characters: charactersMatch ? charactersMatch[1].trim() : '',
+        actionSequence: actionMatch ? actionMatch[1].trim() : '',
+        dialogue: dialogueMatch ? dialogueMatch[1].trim() : ''
+    };
+
+    return { cleanText, visualizationData };
+};
+
+const ChatArea = ({ sidebarMode, onVisualization }) => {
     const [messages, setMessages] = useState([
         { id: 1, sender: 'agent', text: 'Hey What\'s up?' },
     ]);
@@ -44,14 +68,20 @@ const ChatArea = ({ sidebarMode }) => {
 
             const responseText = await sendMessage(contextPrefix + userText);
 
+            const { cleanText, visualizationData } = parseVisualization(responseText);
+
+            if (visualizationData && onVisualization) {
+                onVisualization(visualizationData);
+            }
+
             setMessages(prev => [...prev, {
                 id: Date.now() + 1,
                 sender: 'agent',
-                text: responseText
+                text: cleanText
             }]);
 
             if (voiceEnabled) {
-                speakText(responseText).catch(console.error);
+                speakText(cleanText).catch(console.error);
             }
         } catch (error) {
             console.error("Error sending message:", error);

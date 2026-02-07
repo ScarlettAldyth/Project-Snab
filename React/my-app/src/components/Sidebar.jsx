@@ -2,8 +2,9 @@ import React, { useState, useMemo } from 'react';
 import '../App.css';
 import { getGames } from '../data/gameRegistry';
 import { getGameCover } from '../utils/gameUtils';
+import VisualizerDisplay from './VisualizerDisplay';
 
-const Sidebar = ({ mode, setMode }) => {
+const Sidebar = ({ mode, setMode, visualizerData }) => {
     const [activeGame, setActiveGame] = useState(null);
     const games = useMemo(() => getGames(), []);
 
@@ -103,9 +104,7 @@ const Sidebar = ({ mode, setMode }) => {
         return (
             <div className="sidebar visualizer">
                 {renderBackButton('mode_selection')}
-                <div className="placeholder-content">
-                    Visualizer Interface
-                </div>
+                <VisualizerDisplay data={visualizerData} />
             </div>
         );
     }
