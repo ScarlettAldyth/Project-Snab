@@ -1,9 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-//<<<<<<< Agent-Feature-Developement
-import { initializeGemini, sendMessage, resetChat, analyzeConfirmation, analyzeTheme } from '../gemini/geminiChat';
-//=======
-//import { initializeGemini, sendMessageStream, resetChat } from '../gemini/geminiChat';
-//>>>>>>> main
+import { initializeGemini, sendMessage, sendMessageStream, resetChat, analyzeConfirmation, analyzeTheme } from '../gemini/geminiChat';
 import { speakText, stopAudio } from '../gemini/elevenLabsVoice';
 
 const ChatArea = (props) => {
@@ -138,18 +134,20 @@ const ChatArea = (props) => {
                 contextPrefix = `[User is currently in "${modeName}" view] `;
             }
 
-//<<<<<<< Agent-Feature-Developement
             // Send actual message with injected system instruction to guide the agent's response
             const fullPrompt = systemInjection + contextPrefix + userText;
             console.log("--- DEBUG: SENDING MESSAGE ---");
             console.log("System Injection:", systemInjection);
             console.log("Full Prompt:", fullPrompt);
-            const responseText = await sendMessage(fullPrompt);
-//=======
-//            const finalText = await sendMessageStream(contextPrefix + userText, (accumulated) => {
-//                streamTargetRef.current = accumulated;
-//            });
-//>>>>>>> main
+
+            // Use streaming to update the UI in real-time
+            const finalResponseText = await sendMessageStream(fullPrompt, (accumulated) => {
+                streamTargetRef.current = accumulated;
+            });
+
+            // Assign to finalText for voice synthesis
+            // (The variable name 'finalText' was used in the voice block below)
+            var finalText = finalResponseText;
 
             streamDoneRef.current = true;
 
