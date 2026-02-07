@@ -1,6 +1,11 @@
 import { useState, useRef, useEffect } from "react";
 import { sendMessage, resetChat } from "./geminiChat.js";
 
+// Session info - will be dynamic later
+const SESSION_INFO = {
+  currentGame: "Anxiety Navigator", // null when no game active
+};
+
 export default function Chatbot() {
   const [messages, setMessages] = useState([
     { role: "assistant", text: "Hey What's up?" }
@@ -18,12 +23,19 @@ export default function Chatbot() {
     if (!input.trim() || isLoading) return;
 
     const userMessage = input.trim();
+
+    // Build message with session context for Gemini
+    const sessionContext = SESSION_INFO.currentGame
+      ? `[Currently playing: ${SESSION_INFO.currentGame}]`
+      : `[No game active]`;
+    const messageWithContext = `${sessionContext} ${userMessage}`;
+
     setInput("");
-    setMessages((prev) => [...prev, { role: "user", text: userMessage }]);
+    setMessages((prev) => [...prev, { role: "user", text: userMessage }]); // UI shows clean message
     setIsLoading(true);
 
     try {
-      const response = await sendMessage(userMessage);
+      const response = await sendMessage(messageWithContext); // API gets context
       setMessages((prev) => [...prev, { role: "assistant", text: response }]);
     } catch (error) {
       setMessages((prev) => [
