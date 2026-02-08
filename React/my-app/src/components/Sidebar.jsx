@@ -3,6 +3,7 @@ import { Reorder } from 'framer-motion';
 import '../App.css';
 import { getGames } from '../data/gameRegistry';
 import { getGameCover } from '../utils/gameUtils';
+import MindMap from './MindMap';
 import gamesCover from '../assets/ModeCovers/games-cover.jpg';
 import mindMapCover from '../assets/ModeCovers/mind-map-cover.jpg';
 import visualizerCover from '../assets/ModeCovers/visualizer-cover.jpg';
