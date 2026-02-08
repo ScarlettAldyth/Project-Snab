@@ -30,16 +30,25 @@ body {
 
 /* Landing Page Styles */
 .landing-page {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  height: 100%;
-  width: 100%;
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
 }
+
+.landing-bg {
+  position: absolute;
+  top: 0;
+  right: 0;
+
+  width: 100vw;
+  height: 100vh;
+
+  object-fit: cover;
+  object-position: top right;
+}
+
+
 
 .landing-content {
   display: flex;
@@ -62,25 +71,27 @@ body {
   background-repeat: no-repeat;
 }
 
-
 .enter-button {
-  position: absolute;          /* Anchor to .landing-page */
-  top: 335px;
-  right: 300px;
+  position: absolute;
+  top: clamp(400px, 4vw, 48px);
+  right: clamp(200px, 3vw, 48px);
 
-  padding: 20px 50px;
-  font-size: 1.6rem;
-  font-weight: 600;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+  padding: clamp(16px, 3vw, 36px)
+           clamp(32px, 6vw, 90px);
+
+  font-size: clamp(1.2rem, 2.5vw, 2.2rem);
+  border-radius: clamp(32px, 6vw, 80px);
+
+  font-weight: 700;
+  background: linear-gradient(135deg, #667eea, #764ba2, #f093fb);
   color: white;
   border: none;
-  border-radius: 50px;
   cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-  letter-spacing: 1px;
+
+  box-shadow: 0 12px 35px rgba(102, 126, 234, 0.45);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
+
 
 
 .enter-button:hover {
