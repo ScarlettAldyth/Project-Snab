@@ -24,6 +24,16 @@ Activity recommendations are based on the emotional context of the user’s mess
 
 ---
 
+## Tools Utilized
+
+- Front-end: HTML, CSS, JavaScript, React
+- Build & Deployment: Vite, Vercel
+- Development Tools: Git, GitHub, VSCode, Antigravity
+- Design: Canva
+- External APIs: ElevenLabs API, Gemini API
+
+---
+
 ## Core Features
 
 ### 1. AI Mental Health Coach (Gemini-powered)
