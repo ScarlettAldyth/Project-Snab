@@ -102,6 +102,21 @@ Helps organize complex thoughts, connections, and triggers (for complex relation
 - Strategic automation: automated lower‑priority components (UI scaffolding, side activities) to focus effort on LLM behavior
 - Core focus: refining the LLM to deliver safe, psychologically grounded responses and accurately recommend the appropriate activity based on user state
 
+## How we overcame these challenges
+- Safety vs. approachability: We addressed this by explicitly constraining the agent’s tone and response boundaries through psychologically informed context engineering, ensuring the agent remained supportive and companion-like without adopting a clinical voice or encouraging emotional dependency.
+
+- Meaningful interactions: We iteratively tested and refined side activities, removing those that felt superficial and retaining only activities that provided clear grounding, reflection, or emotional regulation benefits aligned with the user’s immediate state.
+
+- Activity recommendation errors: We resolved this by tightening constraints on the agent’s outputs and explicitly mapping valid activities to available tools, preventing the model from suggesting nonexistent or unsupported interactions.
+
+- System complexity: To manage the high level of ambition, we simplified the overall architecture, reducing the number of moving parts and focusing on a frontend-only implementation that allowed parallel development without excessive integration overhead.
+
+- Scope management: Mid-development reassessments led us to deprioritize or remove features that did not directly improve the core user experience, preventing overbuilding and keeping the project feasible within time and resource constraints.
+
+- Strategic automation: We automated lower-priority components, such as UI scaffolding and basic activity generation, allowing the team to concentrate effort on higher-impact areas rather than manual implementation details.
+
+- Core focus: We centered development around refining the LLM’s behavior, emphasizing safety, psychological grounding, and accurate activity selection based on user context, ensuring the system’s most critical component received the greatest attention.
+
 ---
 
 ## Accomplishments that we're proud of: 
@@ -132,4 +147,5 @@ Our next step is evolving Theraspell into a Duolingo‑style experience—one th
 - Scarlett O’Shaughnessey
 - Ananya Jain
 - Bomin Kim
+
 - Nikhil Bhagwat
