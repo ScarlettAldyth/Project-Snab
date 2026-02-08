@@ -49,7 +49,25 @@ body {
   /* Add a semi-transparent background to make the button pop if needed, or keep it minimal */
 }
 
+
+.landing-page {
+  position: relative;          /* REQUIRED */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+
 .enter-button {
+  position: absolute;          /* Anchor to .landing-page */
+  top: 335px;
+  right: 300px;
+
   padding: 20px 50px;
   font-size: 1.6rem;
   font-weight: 600;
@@ -63,6 +81,7 @@ body {
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   letter-spacing: 1px;
 }
+
 
 .enter-button:hover {
   transform: translateY(-3px) scale(1.05);
