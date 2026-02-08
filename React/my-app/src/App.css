@@ -464,7 +464,27 @@ body {
 }
 
 /* Mind map and visualizer modes */
-.sidebar.mind-map,
+/* .sidebar.mind-map,
 .sidebar.visualizer {
   overflow: hidden;
+} */
+
+.sidebar.mind-map {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.sidebar.mind-map-placeholder {
+    flex: 1;
+}
+
+.sidebar.visualizer {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.sidebar.visualizer-placeholder {
+    flex: 1;
 }
